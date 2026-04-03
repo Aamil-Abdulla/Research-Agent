@@ -1,6 +1,6 @@
-.env
+venv/
 .env
 __pycache__/
-reports/
-*.pkl
+*.pyc
 .DS_Store
+reports/
