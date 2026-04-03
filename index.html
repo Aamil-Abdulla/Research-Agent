@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Research Agent</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d0d0d;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #dfdfdf;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 700px;
+      margin-bottom: 32px;
+    }
+
+    input {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus { border-color: #10c888; }
+
+    button {
+      padding: 12px 24px;
+      background: #18974f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover { background: #0da06c; }
+    button:disabled { background: #444; cursor: not-allowed; }
+
+    .status {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+      min-height: 20px;
+    }
+
+    .results {
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 20px 24px;
+    }
+
+    .card h2 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #10c863;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      font-size: 13.5px;
+      line-height: 1.75;
+      color: #ccc;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>AI Research Agent</h1>
+  <p class="subtitle">One of The Fastest AI Research Agents right now!</p>
+
+  <div class="search-bar">
+    <input id="queryInput" type="text" placeholder="e.g. latest AI agent frameworks 2026" />
+    <button id="searchBtn" onclick="runResearch()">Research</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="results" id="results"></div>
+
+  <script>
+    async function runResearch() {
+      const query = document.getElementById("queryInput").value.trim();
+      if (!query) return;
+
+      const btn = document.getElementById("searchBtn");
+      const status = document.getElementById("status");
+      const results = document.getElementById("results");
+
+      btn.disabled = true;
+      status.textContent = "Searching the web...";
+      results.innerHTML = "";
+
+      try {
+        await new Promise(r => setTimeout(r, 500));
+        status.textContent = "Summarizing results...";
+
+        const response = await fetch("/research", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query })
+        });
+
+        const data = await response.json();
+        status.textContent = "Done!";
+
+        results.innerHTML = `
+          <div class="card">
+            <h2>Summary</h2>
+            <p>${data.summary}</p>
+          </div>
+          <div class="card">
+            <h2>Full Report</h2>
+            <p>${data.final_report}</p>
+          </div>
+        `;
+
+      } catch (err) {
+        status.textContent = "Something went wrong. Try again.";
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById("queryInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") runResearch();
+    });
+  </script>
+
+</body>
+</html>

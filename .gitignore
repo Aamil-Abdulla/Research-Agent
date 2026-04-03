@@ -1,0 +1,6 @@
+.env
+.env
+__pycache__/
+reports/
+*.pkl
+.DS_Store
