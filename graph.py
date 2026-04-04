@@ -1,4 +1,3 @@
-from sympy import content
 from datetime import datetime
 from langgraph.graph import StateGraph , END
 from typing import TypedDict
@@ -40,8 +39,8 @@ Summary:
     response = groq.invoke(prompt)
     return {"summary" :response.content}
 
-def report_nodes(state : ResearchState):
-    print(f"Generating report ...")
+def report_nodes(state: ResearchState):
+    print("Generating report...")
     prompt = f"""
     Based on this summary, write a structured research report with:
     - Overview
@@ -51,20 +50,7 @@ def report_nodes(state : ResearchState):
 Report: 
     """
     response = groq.invoke(prompt)
-    report_text = response.content
-
-    os.makedirs("reports", exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"reports/report_{timestamp}.md"
-    with open(filename, "w",encoding="utf-8") as f:
-        f.write(f"Research Report\n\n")
-        f.write(f"**Query:** {state['query']}\n\n")
-        f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-        f.write(f"**Summary:**\n{state['summary']}\n\n")
-        f.write(f"**Full Report:**\n{report_text}\n")
-        f.write(f"---\n\n")
-    print(f"Report saved :  {filename}")
-    return {"final_report" : report_text}
+    return {"final_report": response.content}
 
 
 def build_graph():
