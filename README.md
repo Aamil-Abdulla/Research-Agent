@@ -5,7 +5,7 @@ An autonomous AI research agent that searches the web, summarizes findings, and 
 🌐 **Live Demo:** [research-agent-production-aeb8.up.railway.app](https://research-agent-production-aeb8.up.railway.app/)
 
 ---
-
+---
 ## What It Does
 
 1. User enters a research query
