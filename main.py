@@ -1,24 +1,31 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
-from graph import build_graph
-from pydantic import BaseModel
+import os
 
-app = FastAPI()
-research_app = build_graph()
+from starlette.requests import Request
+from langchain_azure_ai.agents.hosting import InvocationsHostServer
 
-class Query_Request(BaseModel):
-    query : str
+from graph import build_graph  # your existing, unchanged graph.py
 
-@app.get("/")
-async def home():
-    with open("index.html" , "r") as f:
-        return HTMLResponse(content = f.read())
-    
-@app.post("/research")
-async def research(request : Query_Request):
-    result = research_app.invoke({"query" : request.query})
-    return {
-        "query" : result["query"],
-        "summary" : result["summary"],
-        "final_report" : result["final_report"]
-    }
+
+def get_response_text(output: dict) -> str:
+    return output.get("final_report", "")
+
+
+class ResearchHostServer(InvocationsHostServer):
+    async def parse_request(self, request: Request) -> tuple[str, bool]:
+        data = await request.json()
+        query = data.get("message", "")
+        stream = bool(data.get("stream", False))
+        return query, stream
+
+    def build_input(self, parsed_data) -> dict:
+        return {"query": parsed_data, "messages": []}
+
+
+def main() -> None:
+    graph = build_graph()
+    port = int(os.environ.get("PORT", "8088"))
+    ResearchHostServer(graph, output_parser=get_response_text).run(port=port)
+
+
+if __name__ == "__main__":
+    main()

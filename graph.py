@@ -1,10 +1,11 @@
 from datetime import datetime
 from langgraph.graph import StateGraph , END
-from typing import TypedDict
+from typing import Annotated, TypedDict
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os
 from tavily import TavilyClient
+from langgraph.graph.message import add_messages
 
 load_dotenv()
 
@@ -14,9 +15,10 @@ class ResearchState(TypedDict):
     search_results : str
     summary : str
     final_report : str
+    messages: Annotated[list, add_messages]
 
 tavily = TavilyClient(api_key = os.getenv("TAVILY_API_KEY"))
-groq = ChatGroq(model="llama-3.1-8b-instant", api_key=os.getenv("GROQ_API_KEY"))
+groq = ChatGroq(model="openai/gpt-oss-20b", api_key=os.getenv("GROQ_API_KEY"))
 
 
 def search_nodes(state : ResearchState):
