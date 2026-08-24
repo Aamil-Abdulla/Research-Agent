@@ -16,7 +16,7 @@ class ResearchState(TypedDict):
     final_report : str
 
 tavily = TavilyClient(api_key = os.getenv("TAVILY_API_KEY"))
-groq = ChatGroq(model="llama-3.1-8b-instant", api_key=os.getenv("GROQ_API_KEY"))
+groq = ChatGroq(model="openai/gpt-oss-20b", api_key=os.getenv("GROQ_API_KEY"))
 
 
 def search_nodes(state : ResearchState):
