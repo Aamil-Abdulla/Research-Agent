@@ -2,8 +2,7 @@
 
 An autonomous AI research agent that searches the web, summarizes findings, and generates structured research reports — all in one click.
 
-🌐 **Live Demo:** [research-agent-production-aeb8.up.railway.app](https://research-agent-production-aeb8.up.railway.app/)
-
+🌐 **Live Demo:** [research-agent-cwvv.onrender.com](https://research-agent-cwvv.onrender.com/)
 ---
 ---
 ## What It Does
@@ -26,7 +25,7 @@ An autonomous AI research agent that searches the web, summarizes findings, and 
 | Backend | FastAPI |
 | Frontend | HTML, CSS, Vanilla JS |
 | Containerization | Docker |
-| Deployment | Railway |
+| Deployment | Render |
 
 ---
 
